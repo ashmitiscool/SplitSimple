@@ -1,39 +1,101 @@
-/* --- Reset & Base Styles --- */
+/* --- Reset --- */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* --- Body Layout --- */
 body {
   font-family: 'Inter', sans-serif;
   background-color: #f4f4f4;
-  /* Clean off-white background */
   color: #1a1a1a;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
-/* --- Layout Container --- */
-.container {
-  text-align: center;
+  min-height: 100vh;
+
+  /* stack navbar + hero vertically */
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 4rem;
-  /* Space between text and button */
 }
 
-/* --- Typography --- */
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar {
+  height: 70px;
+  padding: 0 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: transparent;
+}
+
+.nav-logo {
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  font-size: 0.95rem;
+  color: #333;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.nav-link:hover {
+  opacity: 0.6;
+}
+
+.divider {
+  width: 1px;
+  height: 20px;
+  background: #ddd;
+}
+
+.profile-icon {
+  cursor: pointer;
+}
+
+
+/* =========================
+   HERO (center content)
+========================= */
+
+.container {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+  gap: 4rem;
+}
+
+
+/* =========================
+   Typography
+========================= */
+
 .logo {
   font-size: 5rem;
-  /* Big, bold font */
   font-weight: 800;
   letter-spacing: -2px;
-  /* Tighter tracking for modern look */
-  margin-bottom: 0.5rem;
 }
 
 .usp {
@@ -42,54 +104,59 @@ body {
   color: #666;
 }
 
-/* --- The Split Button --- */
+
+/* =========================
+   Split Button
+========================= */
+
 .split-btn {
   width: 180px;
   height: 180px;
   border-radius: 50%;
-  /* Makes it a perfect circle */
   border: none;
+
   background-color: #1a1a1a;
-  /* Stark black */
-  color: #ffffff;
-  font-family: 'Inter', sans-serif;
+  color: white;
+
   font-size: 1.5rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 1px;
+
   cursor: pointer;
+
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  /* Soft shadow for depth */
   transition: all 0.2s ease;
 }
 
-/* --- Hover & Click Effects --- */
 .split-btn:hover {
-  background-color: #000000;
   transform: scale(1.05);
-  /* Grows slightly on hover */
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
 }
 
 .split-btn:active {
   transform: scale(0.95);
-  /* Shrinks slightly when clicked */
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* --- Mobile Responsiveness --- */
+
+/* =========================
+   Mobile
+========================= */
+
 @media (max-width: 600px) {
+
   .logo {
     font-size: 3.5rem;
-  }
-
-  .usp {
-    font-size: 1rem;
   }
 
   .split-btn {
     width: 140px;
     height: 140px;
-    font-size: 1.25rem;
+  }
+
+  .navbar {
+    padding: 0 20px;
+  }
+
+  .nav-right {
+    gap: 16px;
   }
 }

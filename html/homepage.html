@@ -4,25 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SplitSimple</title>
+
     <link rel="stylesheet" href="../css/homepage.css">
+
+    <!-- Inter font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;800&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
+
 <body>
 
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <span class="nav-logo">SplitSimple</span>
+        </div>
+
+        <div class="nav-right">
+            <a class="nav-link"><i data-lucide="history"></i> History</a>
+            <a class="nav-link"><i data-lucide="users"></i> Groups</a>
+            <div class="divider"></div>
+            <i class="profile-icon" data-lucide="user"></i>
+        </div>
+    </nav>
+
+
+    <!-- HERO SECTION -->
     <main class="container">
         <div class="brand-header">
             <h1 class="logo">SplitSimple</h1>
             <p class="usp">Fast, equal splits. No bloat.</p>
         </div>
 
-        <div class="action-area">
-            <button class="split-btn" type="button">
-                Split
-            </button>
-        </div>
+        <button class="split-btn" type="button">
+            Split
+        </button>
     </main>
+
+    <script>
+        lucide.createIcons();
+    </script>
 
 </body>
 </html>
