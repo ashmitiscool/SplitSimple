@@ -1,0 +1,95 @@
+/* --- Reset & Base Styles --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f4f4f4;
+  /* Clean off-white background */
+  color: #1a1a1a;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* --- Layout Container --- */
+.container {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rem;
+  /* Space between text and button */
+}
+
+/* --- Typography --- */
+.logo {
+  font-size: 5rem;
+  /* Big, bold font */
+  font-weight: 800;
+  letter-spacing: -2px;
+  /* Tighter tracking for modern look */
+  margin-bottom: 0.5rem;
+}
+
+.usp {
+  font-size: 1.25rem;
+  font-weight: 300;
+  color: #666;
+}
+
+/* --- The Split Button --- */
+.split-btn {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  /* Makes it a perfect circle */
+  border: none;
+  background-color: #1a1a1a;
+  /* Stark black */
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  /* Soft shadow for depth */
+  transition: all 0.2s ease;
+}
+
+/* --- Hover & Click Effects --- */
+.split-btn:hover {
+  background-color: #000000;
+  transform: scale(1.05);
+  /* Grows slightly on hover */
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+}
+
+.split-btn:active {
+  transform: scale(0.95);
+  /* Shrinks slightly when clicked */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 600px) {
+  .logo {
+    font-size: 3.5rem;
+  }
+
+  .usp {
+    font-size: 1rem;
+  }
+
+  .split-btn {
+    width: 140px;
+    height: 140px;
+    font-size: 1.25rem;
+  }
+}
