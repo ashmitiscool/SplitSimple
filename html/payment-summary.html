@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment Summary - SplitSimple</title>
+
+  <link rel="stylesheet" href="../css/payment-summary.css" />
+  <link rel="stylesheet" href="../css/navbar.css">
+
+
+  <!-- same font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+
+   <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <span class="nav-logo">SplitSimple</span>
+        </div>
+
+        <div class="nav-right">
+            <a class="nav-link"><i data-lucide="history"></i> History</a>
+            <a class="nav-link"><i data-lucide="users"></i> Groups</a>
+            <div class="divider"></div>
+            <i class="profile-icon" data-lucide="user"></i>
+        </div>
+    </nav>
+
+
+  <!-- Page Content -->
+  <main class="summary-wrapper">
+
+    <section class="summary-card">
+
+      <h1 class="total-label">Total Amount:</h1>
+      <h2 class="total-amount">Rs. 1000</h2>
+      <p class="payable-to">payable to Ashmit</p>
+
+      <table class="payment-table">
+
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Amount to be paid</th>
+            <th>Payment Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>Sayan</td>
+            <td>1 pizza</td>
+            <td>Rs. 200</td>
+            <td class="status not-paid">Not Paid</td>
+          </tr>
+
+          <!-- more rows later -->
+        </tbody>
+
+      </table>
+
+    </section>
+
+  </main>
+  <script>
+    lucide.createIcons();
+  </script>
+
+</body>
+</html>

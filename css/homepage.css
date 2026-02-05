@@ -23,52 +23,6 @@ body {
    NAVBAR
 ========================= */
 
-.navbar {
-  height: 70px;
-  padding: 0 40px;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  background: transparent;
-}
-
-.nav-logo {
-  font-weight: 700;
-  font-size: 1.25rem;
-}
-
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 28px;
-}
-
-.nav-link {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  font-size: 0.95rem;
-  color: #333;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.nav-link:hover {
-  opacity: 0.6;
-}
-
-.divider {
-  width: 1px;
-  height: 20px;
-  background: #ddd;
-}
-
-.profile-icon {
-  cursor: pointer;
-}
 
 
 /* =========================

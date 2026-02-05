@@ -1,0 +1,109 @@
+/* ===== Reset ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #f4f4f4;
+  color: #1a1a1a;
+
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+
+
+/* =========================
+   Main layout
+========================= */
+
+.summary-wrapper {
+  flex: 1;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 40px;
+}
+
+
+/* =========================
+   Card
+========================= */
+
+.summary-card {
+  width: 900px;
+  max-width: 95%;
+
+  background: white;
+
+  border: 2px solid #1a1a1a;
+
+  padding: 60px 70px;
+}
+
+
+/* =========================
+   Typography
+========================= */
+
+.total-label {
+  font-weight: 400;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.total-amount {
+  font-size: 3rem;
+  font-weight: 800;
+  text-align: center;
+  margin-top: 6px;
+}
+
+.payable-to {
+  text-align: center;
+  color: #666;
+  margin-bottom: 40px;
+}
+
+
+/* =========================
+   Table
+========================= */
+
+.payment-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.payment-table th {
+  text-align: left;
+  font-weight: 600;
+  padding: 14px 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.payment-table td {
+  padding: 16px 10px;
+  border-bottom: 1px solid #eee;
+}
+
+
+/* Status colors */
+
+.status.not-paid {
+  color: #e53935;
+  font-weight: 600;
+}
+
+.status.paid {
+  color: #2e7d32;
+  font-weight: 600;
+}
