@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SplitSimple</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="brand">SplitSimple</div>
+        <nav class="nav-items">
+            <a href="#" class="nav-link" id="historyLink">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <span class="nav-text">History</span>
+            </a>
+            <a href="#" class="nav-link">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                <span class="nav-text">Groups</span>
+            </a>
+            <a href="#" class="nav-link">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            </a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="view-section" id="hero">
+            <h1>SplitSimple</h1>
+            <p class="subtitle">Fast, equal splits. No bloat.</p>
+            <div class="split-btn-container">
+                <button class="big-btn" id="startBtn">SPLIT</button>
+            </div>
+        </div>
+
+        <div class="view-section hidden" id="setup">
+            <div class="setup-inputs">
+                <input type="number" id="setupAmount" placeholder="$ 0.00" inputmode="decimal" step="0.01">
+                <input type="number" id="setupCount" placeholder="2 People" inputmode="numeric" min="1">
+            </div>
+            
+            <button class="big-continue" id="continueBtn">Continue &rarr;</button>
+            
+            <button class="secondary-btn" id="cancelSetupBtn" style="margin-top: 1.5rem; opacity: 0.5;">Cancel</button>
+        </div>
+
+        <div class="view-section hidden" id="app">
+            <div class="top-inputs">
+                <input type="number" id="totalAmount" placeholder="$ Total" inputmode="decimal">
+            </div>
+            
+            <div class="ledger-container">
+                <ul class="ledger-list" id="ledgerList">
+                    </ul>
+                <button id="addPersonBtn" class="add-btn">+ Add Person</button>
+            </div>
+
+            <div class="controls">
+                <button class="primary-btn" id="saveBtn">Save to History</button>
+                <button class="secondary-btn" id="resetBtn">Cancel / New Split</button>
+            </div>
+        </div>
+
+        <div class="view-section hidden" id="history">
+            <h2>History</h2>
+            <div class="history-container">
+                <ul class="history-list" id="historyList"></ul>
+                <div class="empty-state" id="emptyHistoryMsg">No splits saved yet.</div>
+            </div>
+            <div class="controls">
+                <button class="secondary-btn" id="backFromHistoryBtn">Back to Home</button>
+                <button class="secondary-btn danger" id="clearHistoryBtn">Clear History</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
