@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SplitSimple | Input Details</title>
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/input-details.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="homepage.html" class="nav-logo">SplitSimple</a>
+        </div>
+        <div class="nav-right">
+            <a href="#" class="nav-link"><i data-lucide="history"></i> History</a>
+            <a href="#" class="nav-link"><i data-lucide="users"></i> Groups</a>
+            <div class="divider"></div>
+            <i class="profile-icon" data-lucide="user"></i>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="input-card">
+            <h2 class="form-title">Enter Expense Details</h2>
+            
+            <form action="payment-summary.html">
+                <div class="amount-group">
+                    <label>Total Amount</label>
+                    <div class="amount-input-wrapper">
+                        <span>Rs.</span>
+                        <input type="number" placeholder="0" class="main-amount-input" required autofocus>
+                    </div>
+                </div>
+
+                <div class="details-grid">
+                    <div class="field">
+                        <label>Payable to</label>
+                        <input type="text" placeholder="e.g., Ashmit" class="line-input" required>
+                    </div>
+
+                    <div class="field">
+                        <label>Split between</label>
+                        <input type="number" placeholder="Number of people" class="line-input" min="1" required>
+                    </div>
+                </div>
+
+                <div class="field full-width">
+                    <label>What was this for?</label>
+                    <input type="text" placeholder="e.g., 1 pizza" class="line-input">
+                </div>
+
+                <button type="submit" class="calculate-btn">Generate Split</button>
+            </form>
+        </div>
+    </main>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

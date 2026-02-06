@@ -14,6 +14,17 @@
   font-size: 1.25rem;
 }
 
+/* Make the logo a non-purple link and remove underline */
+.nav-logo,
+.nav-left a.nav-logo {
+  color: #333;
+  text-decoration: none;
+}
+
+/* .nav-logo:hover {
+  opacity: 0.8;
+} */
+
 .nav-right {
   display: flex;
   align-items: center;

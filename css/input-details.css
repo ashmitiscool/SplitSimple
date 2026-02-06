@@ -1,0 +1,124 @@
+/* --- Base Setup --- */
+body {
+  background-color: #f4f4f4;
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+}
+
+.main-content {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  min-height: calc(100vh - 70px);
+}
+
+/* --- Floating White Card (Matches your summary design) --- */
+.input-card {
+  background: white;
+  width: 100%;
+  max-width: 650px;
+  padding: 3rem;
+  border: 1px solid #000;
+  /* Matching the stroke in image_14863d.png */
+  text-align: center;
+}
+
+.form-title {
+  font-weight: 300;
+  color: #666;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.9rem;
+}
+
+/* --- Amount Input Section --- */
+.amount-group label {
+  display: block;
+  font-size: 1.2rem;
+  color: #000;
+}
+
+.amount-input-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  font-weight: 800;
+  margin-top: 10px;
+  gap: 10px;
+}
+
+.main-amount-input {
+  border: none;
+  border-bottom: 2px solid #eee;
+  width: 180px;
+  font-family: inherit;
+  font-weight: 800;
+  font-size: 3.5rem;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.main-amount-input:focus {
+  border-bottom-color: #000;
+}
+
+/* --- Field Grid --- */
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-top: 40px;
+  text-align: left;
+}
+
+.field {
+  margin-bottom: 25px;
+  text-align: left;
+}
+
+.field label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 8px;
+}
+
+.line-input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  padding: 10px 0;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.line-input:focus {
+  border-bottom-color: #000;
+}
+
+/* --- Dark Button --- */
+.calculate-btn {
+  margin-top: 2rem;
+  background: #1a1a1a;
+  color: white;
+  border: none;
+  padding: 15px 40px;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: transform 0.2s;
+}
+
+.calculate-btn:hover {
+  transform: scale(1.05);
+  background: #000;
+}
