@@ -20,8 +20,8 @@
                 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                 <span class="nav-text">Groups</span>
             </a>
-            <a href="#" class="nav-link">
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <a href="#" class="nav-link" id="accountLink">
+                <svg class="icon" id="userIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
             </a>
         </nav>
     </header>
@@ -35,14 +35,28 @@
             </div>
         </div>
 
+        <div class="view-section hidden" id="auth">
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="tabLogin">Login</button>
+                <button class="auth-tab" id="tabRegister">Sign Up</button>
+            </div>
+            
+            <div class="auth-form">
+                <input type="text" id="authUsername" placeholder="Username" autocomplete="off">
+                <input type="password" id="authPassword" placeholder="Password">
+                <div class="auth-error" id="authError"></div>
+                <button class="big-continue" id="authActionBtn">Login</button>
+                <button class="secondary-btn" id="cancelAuthBtn">Cancel</button>
+                <button class="secondary-btn danger hidden" id="logoutBtn">Log Out</button>
+            </div>
+        </div>
+
         <div class="view-section hidden" id="setup">
             <div class="setup-inputs">
                 <input type="number" id="setupAmount" placeholder="$ 0.00" inputmode="decimal" step="0.01">
                 <input type="number" id="setupCount" placeholder="2 People" inputmode="numeric" min="1">
             </div>
-            
             <button class="big-continue" id="continueBtn">Continue &rarr;</button>
-            
             <button class="secondary-btn" id="cancelSetupBtn" style="margin-top: 1.5rem; opacity: 0.5;">Cancel</button>
         </div>
 
@@ -50,13 +64,10 @@
             <div class="top-inputs">
                 <input type="number" id="totalAmount" placeholder="$ Total" inputmode="decimal">
             </div>
-            
             <div class="ledger-container">
-                <ul class="ledger-list" id="ledgerList">
-                    </ul>
+                <ul class="ledger-list" id="ledgerList"></ul>
                 <button id="addPersonBtn" class="add-btn">+ Add Person</button>
             </div>
-
             <div class="controls">
                 <button class="primary-btn" id="saveBtn">Save to History</button>
                 <button class="secondary-btn" id="resetBtn">Cancel / New Split</button>
@@ -64,7 +75,7 @@
         </div>
 
         <div class="view-section hidden" id="history">
-            <h2>History</h2>
+            <h2 id="historyTitle">History</h2>
             <div class="history-container">
                 <ul class="history-list" id="historyList"></ul>
                 <div class="empty-state" id="emptyHistoryMsg">No splits saved yet.</div>
