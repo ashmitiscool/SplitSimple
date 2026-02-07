@@ -15,6 +15,11 @@
   outline: none;
 }
 
+/* --- CRITICAL FIX: Generic Hidden Class --- */
+.hidden {
+  display: none !important;
+}
+
 body {
   background-color: var(--bg-color);
   color: var(--text-color);
@@ -23,6 +28,7 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  /* App-like feel */
 }
 
 /* --- Header --- */
@@ -30,8 +36,9 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 2rem 3rem;
+  padding: 1.5rem 2rem;
   flex-shrink: 0;
+  z-index: 20;
 }
 
 .brand {
@@ -48,7 +55,7 @@ header {
 
 .nav-items {
   display: flex;
-  gap: 2rem;
+  gap: 1.5rem;
   align-items: center;
 }
 
@@ -75,7 +82,6 @@ header {
   stroke-width: 2;
 }
 
-/* Filled icon for logged in state */
 .icon-filled {
   fill: var(--text-color);
 }
@@ -83,29 +89,45 @@ header {
 /* --- Main Layout --- */
 main {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   position: relative;
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
-  text-align: center;
-  padding-bottom: 2rem;
+  /* Allow main to hold absolute children properly */
 }
 
 /* --- View Sections --- */
 .view-section {
   width: 100%;
-  max-width: 600px;
-  padding: 0 2rem;
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  height: 100%;
+  /* Take full height of main */
+  padding: 0 2rem 4rem 2rem;
+  /* Add bottom padding for scroll space */
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  /* Layout */
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: absolute;
+  justify-content: center;
+  /* Center content vertically by default */
+
+  /* Scroll handling */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/* Custom Scrollbar for View Sections */
+.view-section::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+/* Hide scrollbar for cleaner look */
 
 .view-section.hidden {
   opacity: 0;
@@ -149,6 +171,7 @@ h1 {
   cursor: pointer;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
   transition: transform 0.2s, box-shadow 0.2s;
+  flex-shrink: 0;
 }
 
 .big-btn:hover {
@@ -165,7 +188,7 @@ h1 {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   width: 100%;
   align-items: center;
 }
@@ -194,6 +217,73 @@ h1 {
   font-weight: 900;
 }
 
+.group-loader {
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 40px;
+}
+
+.mini-group-list {
+  width: 100%;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+  max-height: 150px;
+  overflow-y: auto;
+  text-align: left;
+}
+
+.mini-group-item {
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.mini-group-item:hover {
+  background: #f9f9f9;
+}
+
+.select-label {
+  font-size: 0.8rem;
+  color: #888;
+  margin-top: 0.5rem;
+}
+
+.text-btn {
+  background: none;
+  border: none;
+  font-size: 0.8rem;
+  text-decoration: underline;
+  cursor: pointer;
+  color: #666;
+  margin-top: 5px;
+}
+
+.active-group-badge {
+  background: var(--accent-color);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+}
+
+.clear-badge {
+  cursor: pointer;
+  font-weight: 900;
+  opacity: 0.7;
+}
+
 .big-continue {
   width: 100%;
   max-width: 250px;
@@ -219,7 +309,7 @@ h1 {
   transform: translateY(0);
 }
 
-/* --- Auth View (NEW) --- */
+/* --- Auth View --- */
 .auth-tabs {
   display: flex;
   gap: 1rem;
@@ -253,7 +343,6 @@ h1 {
 
 .auth-form input {
   font-size: 1.5rem;
-  /* Smaller than setup but still big */
   width: 100%;
   max-width: 300px;
   padding: 0.5rem;
@@ -274,6 +363,66 @@ h1 {
   font-size: 0.9rem;
   margin-top: 1rem;
   height: 1.2em;
+}
+
+/* --- Groups Create View (Improved Layout) --- */
+.group-form-container {
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.group-name-input {
+  font-size: 1.5rem;
+  font-weight: 800;
+  border: none;
+  border-bottom: 2px solid #eee;
+  padding: 0.5rem 0;
+  width: 100%;
+  text-align: left;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.group-name-input:focus {
+  border-bottom-color: var(--accent-color);
+}
+
+.members-input-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  max-height: 250px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.member-create-input {
+  font-size: 1rem;
+  padding: 0.6rem;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  background: #f9f9f9;
+  outline: none;
+}
+
+.member-create-input:focus {
+  background: white;
+  border-color: #ccc;
+}
+
+.create-actions {
+  display: flex;
+  flex-direction: column;
+  /* Stack buttons on mobile */
+  gap: 0.8rem;
+  margin-top: 1rem;
 }
 
 /* --- App/Calculator --- */
@@ -438,6 +587,7 @@ h1 {
   display: flex;
   gap: 1rem;
   align-items: center;
+  justify-content: center;
 }
 
 .primary-btn {
@@ -532,7 +682,6 @@ h2 {
   padding-top: 2rem;
 }
 
-/* Status Classes */
 .text-success {
   color: var(--success);
 }
@@ -547,7 +696,6 @@ h2 {
   stroke-width: 3px;
 }
 
-/* Mobile */
 @media (max-width: 600px) {
   h1 {
     font-size: 3.5rem;
@@ -570,7 +718,6 @@ h2 {
   }
 }
 
-/* --- ANIMATION OVERLAY --- */
 .transition-overlay {
   position: fixed;
   border-radius: 50%;
@@ -578,4 +725,21 @@ h2 {
   z-index: 9999;
   pointer-events: none;
   transition: transform 0.6s cubic-bezier(0.7, 0, 0.3, 1), opacity 0.4s ease-out;
+}
+
+.delete-group-btn {
+  background: transparent;
+  border: none;
+  color: var(--danger);
+  font-size: 1.5rem;
+  line-height: 1;
+  padding: 0 0.5rem;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.delete-group-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
 }

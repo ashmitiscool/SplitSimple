@@ -16,7 +16,7 @@
                 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                 <span class="nav-text">History</span>
             </a>
-            <a href="#" class="nav-link">
+            <a href="#" class="nav-link" id="groupsLink">
                 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                 <span class="nav-text">Groups</span>
             </a>
@@ -56,6 +56,24 @@
                 <input type="number" id="setupAmount" placeholder="$ 0.00" inputmode="decimal" step="0.01">
                 <input type="number" id="setupCount" placeholder="2 People" inputmode="numeric" min="1">
             </div>
+            
+            <div class="group-loader">
+                <button class="secondary-btn" id="loadGroupBtn">📂 Load Saved Group</button>
+                
+                <div id="groupSelectContainer" class="hidden">
+                    <p class="select-label">Pick a group:</p>
+                    <div id="setupGroupList" class="mini-group-list"></div>
+                    <button class="text-btn" id="cancelGroupLoad">Cancel</button>
+                </div>
+
+                <div id="activeGroupDisplay" class="hidden">
+                    <span class="active-group-badge">
+                        Group: <strong id="activeGroupName">Lunch Crew</strong>
+                        <span id="clearActiveGroup" class="clear-badge">×</span>
+                    </span>
+                </div>
+            </div>
+            
             <button class="big-continue" id="continueBtn">Continue &rarr;</button>
             <button class="secondary-btn" id="cancelSetupBtn" style="margin-top: 1.5rem; opacity: 0.5;">Cancel</button>
         </div>
@@ -64,10 +82,13 @@
             <div class="top-inputs">
                 <input type="number" id="totalAmount" placeholder="$ Total" inputmode="decimal">
             </div>
+            
             <div class="ledger-container">
-                <ul class="ledger-list" id="ledgerList"></ul>
+                <ul class="ledger-list" id="ledgerList">
+                    </ul>
                 <button id="addPersonBtn" class="add-btn">+ Add Person</button>
             </div>
+
             <div class="controls">
                 <button class="primary-btn" id="saveBtn">Save to History</button>
                 <button class="secondary-btn" id="resetBtn">Cancel / New Split</button>
@@ -85,6 +106,45 @@
                 <button class="secondary-btn danger" id="clearHistoryBtn">Clear History</button>
             </div>
         </div>
+
+        <div class="view-section hidden" id="groups">
+            
+            <div id="groupsListView" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+                <h2>Your Groups</h2>
+                
+                <div class="history-container" style="height: 50vh; width: 100%; margin-bottom: 2rem;">
+                    <ul class="history-list" id="groupsList"></ul>
+                    <div class="empty-state" id="emptyGroupsMsg">No groups created yet.</div>
+                </div>
+                
+                <div class="controls">
+                    <button class="primary-btn" id="goToCreateGroupBtn">+ Create New Group</button>
+                    <button class="secondary-btn" id="backFromGroupsBtn">Back to Home</button>
+                </div>
+            </div>
+
+            <div id="groupsCreateView" class="hidden" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+                <h2>New Group</h2>
+                
+                <div class="group-form-container">
+                    <input type="text" id="newGroupName" class="group-name-input" placeholder="Group Name (e.g. Lunch)">
+                    
+                    <p style="font-size: 0.9rem; color: #888; margin-top: 1rem; text-align: left; font-weight: 600;">Members:</p>
+                    
+                    <div id="newGroupMembersList" class="members-input-list">
+                        </div>
+                    
+                    <button class="secondary-btn" id="addNewMemberInputBtn" style="align-self: flex-start; margin-top: 0.5rem; font-size: 0.8rem;">+ Add Another Member</button>
+                    
+                    <div class="create-actions" style="margin-top: 2rem;">
+                        <button class="primary-btn" id="saveNewGroupBtn" style="width: 100%;">Save Group</button>
+                        <button class="secondary-btn" id="cancelCreateGroupBtn" style="width: 100%;">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
     </main>
 
     <script src="script.js"></script>
