@@ -12,6 +12,10 @@
     <header>
         <div class="brand">SplitSimple</div>
         <nav class="nav-items">
+            <a href="#" class="nav-link hidden" id="adminLink" style="color: var(--danger);">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                <span class="nav-text">Admin</span>
+            </a>
             <a href="#" class="nav-link" id="historyLink">
                 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                 <span class="nav-text">History</span>
@@ -29,8 +33,7 @@
     <main>
         <div class="view-section" id="hero">
             <h1>SplitSimple</h1>
-            <p class="subtitle">Fast & Equal Splits, Manage Like A Pro!</p>
-            
+            <p class="subtitle">Fast, equal splits. No bloat.</p>
             <div class="split-btn-container">
                 <button class="big-btn" id="startBtn">SPLIT</button>
             </div>
@@ -60,13 +63,11 @@
             
             <div class="group-loader">
                 <button class="secondary-btn" id="loadGroupBtn">📂 Load Saved Group</button>
-                
                 <div id="groupSelectContainer" class="hidden">
                     <p class="select-label">Pick a group:</p>
                     <div id="setupGroupList" class="mini-group-list"></div>
                     <button class="text-btn" id="cancelGroupLoad">Cancel</button>
                 </div>
-
                 <div id="activeGroupDisplay" class="hidden">
                     <span class="active-group-badge">
                         Group: <strong id="activeGroupName">Lunch Crew</strong>
@@ -85,8 +86,7 @@
             </div>
             
             <div class="ledger-container">
-                <ul class="ledger-list" id="ledgerList">
-                    </ul>
+                <ul class="ledger-list" id="ledgerList"></ul>
                 <button id="addPersonBtn" class="add-btn">+ Add Person</button>
             </div>
 
@@ -109,15 +109,12 @@
         </div>
 
         <div class="view-section hidden" id="groups">
-            
             <div id="groupsListView" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
                 <h2>Your Groups</h2>
-                
                 <div class="history-container" style="height: 50vh; width: 100%; margin-bottom: 2rem;">
                     <ul class="history-list" id="groupsList"></ul>
                     <div class="empty-state" id="emptyGroupsMsg">No groups created yet.</div>
                 </div>
-                
                 <div class="controls">
                     <button class="primary-btn" id="goToCreateGroupBtn">+ Create New Group</button>
                     <button class="secondary-btn" id="backFromGroupsBtn">Back to Home</button>
@@ -126,24 +123,35 @@
 
             <div id="groupsCreateView" class="hidden" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
                 <h2>New Group</h2>
-                
                 <div class="group-form-container">
                     <input type="text" id="newGroupName" class="group-name-input" placeholder="Group Name (e.g. Lunch)">
-                    
                     <p style="font-size: 0.9rem; color: #888; margin-top: 1rem; text-align: left; font-weight: 600;">Members:</p>
-                    
-                    <div id="newGroupMembersList" class="members-input-list">
-                        </div>
-                    
+                    <div id="newGroupMembersList" class="members-input-list"></div>
                     <button class="secondary-btn" id="addNewMemberInputBtn" style="align-self: flex-start; margin-top: 0.5rem; font-size: 0.8rem;">+ Add Another Member</button>
-                    
                     <div class="create-actions" style="margin-top: 2rem;">
                         <button class="primary-btn" id="saveNewGroupBtn" style="width: 100%;">Save Group</button>
                         <button class="secondary-btn" id="cancelCreateGroupBtn" style="width: 100%;">Cancel</button>
                     </div>
                 </div>
             </div>
+        </div>
 
+        <div class="view-section hidden" id="admin">
+            <h2>Admin Dashboard</h2>
+            
+            <div id="adminStatsGrid" class="admin-stats-grid">
+                </div>
+
+            <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+                <h3 style="align-self: flex-start; margin-bottom: 1rem; font-size: 1.2rem;">User Management</h3>
+                <div id="adminUserList" class="admin-user-list">
+                    </div>
+            </div>
+            
+            <div class="controls" style="margin-top: 1rem; border-top: 1px solid #ddd; padding-top: 2rem; width: 100%;">
+                <button class="secondary-btn" id="backFromAdminBtn">Back to Home</button>
+                <button class="secondary-btn danger" id="globalResetBtn">⚠ Factory Reset App Data</button>
+            </div>
         </div>
 
     </main>

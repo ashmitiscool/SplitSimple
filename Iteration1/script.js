@@ -6,7 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
         setup: document.getElementById('setup'),
         app: document.getElementById('app'),
         history: document.getElementById('history'),
-        groups: document.getElementById('groups')
+        groups: document.getElementById('groups'),
+        admin: document.getElementById('admin') // New
     };
 
     const inputs = {
@@ -16,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
         list: document.getElementById('ledgerList'),
         authUse: document.getElementById('authUsername'),
         authPass: document.getElementById('authPassword'),
-        // Group Inputs
         newGroupName: document.getElementById('newGroupName'),
         newGroupMembers: document.getElementById('newGroupMembersList')
     };
@@ -29,48 +29,49 @@ document.addEventListener('DOMContentLoaded', () => {
         addPerson: document.getElementById('addPersonBtn'),
         save: document.getElementById('saveBtn'),
         
-        // Navigation
         historyNav: document.getElementById('historyLink'),
         accountNav: document.getElementById('accountLink'),
         groupsNav: document.getElementById('groupsLink'),
+        adminNav: document.getElementById('adminLink'), // New
         backFromHistory: document.getElementById('backFromHistoryBtn'),
         clearHistory: document.getElementById('clearHistoryBtn'),
         brandLogo: document.querySelector('.brand'),
         
-        // Auth
         tabLogin: document.getElementById('tabLogin'),
         tabRegister: document.getElementById('tabRegister'),
         authAction: document.getElementById('authActionBtn'),
         cancelAuth: document.getElementById('cancelAuthBtn'),
         logout: document.getElementById('logoutBtn'),
 
-        // Groups
         goToCreateGroup: document.getElementById('goToCreateGroupBtn'),
         saveNewGroup: document.getElementById('saveNewGroupBtn'),
         cancelCreateGroup: document.getElementById('cancelCreateGroupBtn'),
         addNewMemberInput: document.getElementById('addNewMemberInputBtn'),
         backFromGroups: document.getElementById('backFromGroupsBtn'),
         
-        // Setup Group Loading
         loadGroup: document.getElementById('loadGroupBtn'),
-        cancelGroupLoad: document.getElementById('cancelGroupLoad')
+        cancelGroupLoad: document.getElementById('cancelGroupLoad'),
+
+        backFromAdmin: document.getElementById('backFromAdminBtn'), // New
+        globalReset: document.getElementById('globalResetBtn') // New
     };
 
     const ui = {
         authError: document.getElementById('authError'),
         userIcon: document.getElementById('userIcon'),
         historyTitle: document.getElementById('historyTitle'),
-        // Groups UI
         groupsListView: document.getElementById('groupsListView'),
         groupsCreateView: document.getElementById('groupsCreateView'),
         groupsList: document.getElementById('groupsList'),
         emptyGroupsMsg: document.getElementById('emptyGroupsMsg'),
-        // Setup UI
         groupSelectContainer: document.getElementById('groupSelectContainer'),
         setupGroupList: document.getElementById('setupGroupList'),
         activeGroupDisplay: document.getElementById('activeGroupDisplay'),
         activeGroupName: document.getElementById('activeGroupName'),
-        clearActiveGroup: document.getElementById('clearActiveGroup')
+        clearActiveGroup: document.getElementById('clearActiveGroup'),
+        
+        adminStatsGrid: document.getElementById('adminStatsGrid'), // New
+        adminUserList: document.getElementById('adminUserList') // New
     };
 
     // --- State ---
@@ -79,21 +80,20 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentEditingId = null;
     let currentUser = localStorage.getItem('splitSimpleCurrentUser') || null; 
     let isRegisterMode = false;
-    // New State for Groups
-    let selectedGroupMembers = null; // Stores ["Alice", "Bob"] if a group is picked
+    let selectedGroupMembers = null; 
 
     // Initialize
     updateUserIcon();
 
     // --- Helper Functions ---
-    function getDataKey(type) {
-        // type = 'History' or 'Groups'
-        const suffix = currentUser ? `_${currentUser}` : `_guest`;
+    function getDataKey(type, specificUser = null) {
+        const user = specificUser || currentUser;
+        const suffix = user ? `_${user}` : `_guest`;
         return `splitSimple${type}${suffix}`;
     }
 
-    function getStorageData(type) {
-        return JSON.parse(localStorage.getItem(getDataKey(type))) || [];
+    function getStorageData(type, specificUser = null) {
+        return JSON.parse(localStorage.getItem(getDataKey(type, specificUser))) || [];
     }
 
     function saveStorageData(type, data) {
@@ -101,12 +101,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateUserIcon() {
+        // Toggle user icon fill
         if (currentUser) {
             ui.userIcon.classList.add('icon-filled');
             ui.userIcon.innerHTML = `<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4" fill="currentColor"></circle>`;
         } else {
             ui.userIcon.classList.remove('icon-filled');
             ui.userIcon.innerHTML = `<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>`;
+        }
+        
+        // Show/Hide Admin Nav
+        if (currentUser === 'admin') {
+            buttons.adminNav.classList.remove('hidden');
+        } else {
+            buttons.adminNav.classList.add('hidden');
         }
     }
 
@@ -123,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
         inputs.setupCount.value = '';
         participants = [];
         currentEditingId = null;
-        selectedGroupMembers = null; // Reset group selection
+        selectedGroupMembers = null;
         ui.activeGroupDisplay.classList.add('hidden');
         buttons.loadGroup.classList.remove('hidden');
     }
@@ -133,12 +141,11 @@ document.addEventListener('DOMContentLoaded', () => {
     buttons.backFromHistory.addEventListener('click', goHome);
     buttons.cancelAuth.addEventListener('click', goHome);
     buttons.backFromGroups.addEventListener('click', goHome);
+    buttons.backFromAdmin.addEventListener('click', goHome);
 
     // --- GROUPS LOGIC ---
-
     buttons.groupsNav.addEventListener('click', () => {
         switchView('groups');
-        // Reset to list view
         ui.groupsListView.classList.remove('hidden');
         ui.groupsCreateView.classList.add('hidden');
         renderGroupsList();
@@ -149,7 +156,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ui.groupsCreateView.classList.remove('hidden');
         inputs.newGroupName.value = '';
         inputs.newGroupMembers.innerHTML = '';
-        // Add 2 default inputs
         addMemberInput();
         addMemberInput();
     });
@@ -171,12 +177,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     buttons.saveNewGroup.addEventListener('click', () => {
         const name = inputs.newGroupName.value.trim();
-        // Collect Member Names
         const memberInputs = document.querySelectorAll('.member-create-input');
         const members = [];
-        memberInputs.forEach(inp => {
-            if(inp.value.trim()) members.push(inp.value.trim());
-        });
+        memberInputs.forEach(inp => { if(inp.value.trim()) members.push(inp.value.trim()); });
 
         if (!name || members.length < 1) {
             alert("Please enter a group name and at least one member.");
@@ -184,14 +187,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const groups = getStorageData('Groups');
-        groups.push({
-            id: Date.now(),
-            name: name,
-            members: members
-        });
+        groups.push({ id: Date.now(), name: name, members: members });
         saveStorageData('Groups', groups);
 
-        // Reset UI
         ui.groupsCreateView.classList.add('hidden');
         ui.groupsListView.classList.remove('hidden');
         renderGroupsList();
@@ -210,30 +208,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
         groups.forEach((group, index) => {
             const li = document.createElement('li');
-            li.className = 'history-card'; // Reuse style
+            li.className = 'history-card'; 
             
-            // Added Delete Button Container
             li.innerHTML = `
-                <div class="h-header">
+                <div class="h-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
                     <span class="h-total">${group.name}</span>
-                    <button class="delete-group-btn" data-index="${index}" style="background:none; border:none; cursor:pointer; color:#ff4444; font-weight:bold; font-size:1.2rem;">&times;</button>
+                    <button class="delete-group-btn" data-index="${index}">&times;</button>
                 </div>
                 <div class="h-people">
                     ${group.members.length} Members: ${group.members.join(', ')}
                 </div>
             `;
             
-            // Attach Delete Logic
             const deleteBtn = li.querySelector('.delete-group-btn');
             deleteBtn.addEventListener('click', (e) => {
-                // Stop the click from bubbling up (if you had a click on the card to edit later)
                 e.stopPropagation(); 
-                
                 if(confirm(`Delete group "${group.name}"?`)) {
-                    const currentGroups = getStorageData('Groups');
-                    currentGroups.splice(index, 1); // Remove item at index
-                    saveStorageData('Groups', currentGroups);
-                    renderGroupsList(); // Re-render list
+                    groups.splice(index, 1);
+                    saveStorageData('Groups', groups);
+                    renderGroupsList(); 
                 }
             });
 
@@ -242,7 +235,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- SETUP: LOAD GROUP LOGIC ---
-
     buttons.loadGroup.addEventListener('click', () => {
         const groups = getStorageData('Groups');
         if (groups.length === 0) {
@@ -258,9 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const div = document.createElement('div');
             div.className = 'mini-group-item';
             div.innerText = `${group.name} (${group.members.length})`;
-            div.addEventListener('click', () => {
-                applyGroupToSetup(group);
-            });
+            div.addEventListener('click', () => applyGroupToSetup(group));
             ui.setupGroupList.appendChild(div);
         });
     });
@@ -271,17 +261,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function applyGroupToSetup(group) {
-        // UI Updates
         ui.groupSelectContainer.classList.add('hidden');
         ui.activeGroupDisplay.classList.remove('hidden');
         ui.activeGroupName.innerText = group.name;
-
-        // Logic Updates
         selectedGroupMembers = group.members;
         inputs.setupCount.value = group.members.length;
-        
-        // Visual feedback
-        inputs.setupCount.disabled = true; // Lock count when group is active
+        inputs.setupCount.disabled = true;
     }
 
     ui.clearActiveGroup.addEventListener('click', () => {
@@ -292,9 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
         inputs.setupCount.disabled = false;
     });
 
-
     // --- AUTHENTICATION ---
-    // (Existing Auth Logic remains mostly the same, ensuring keys are updated)
     buttons.accountNav.addEventListener('click', () => {
         if (currentUser) {
             isRegisterMode = false;
@@ -375,10 +358,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- MAIN APP FLOW ---
-
-    // 1. HOME -> SETUP
     buttons.start.addEventListener('click', () => {
-        // Animation Logic (Shortened for brevity, same as before)
         const rect = buttons.start.getBoundingClientRect();
         const overlay = document.createElement('div');
         overlay.classList.add('transition-overlay');
@@ -393,7 +373,6 @@ document.addEventListener('DOMContentLoaded', () => {
         overlay.style.transform = `scale(${scale})`;
 
         setTimeout(() => {
-            // Clean inputs
             inputs.setupAmount.value = '';
             inputs.setupCount.value = '';
             inputs.setupCount.disabled = false;
@@ -409,7 +388,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 500);
     });
 
-    // 2. SETUP -> APP (Modified for Groups)
     buttons.continue.addEventListener('click', () => {
         const amount = inputs.setupAmount.value;
         const count = parseInt(inputs.setupCount.value);
@@ -420,15 +398,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         participants = [];
-        
-        // CHECK: Are we using a Group or Default?
         if (selectedGroupMembers && selectedGroupMembers.length === count) {
-            // Use Group Names
             selectedGroupMembers.forEach((name, i) => {
                 participants.push({ id: i+1, name: name, paid: false });
             });
         } else {
-            // Use Default Names
             for (let i = 1; i <= count; i++) {
                 participants.push({ id: i, name: `Person ${i}`, paid: false });
             }
@@ -441,10 +415,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateSplitAmounts();
     });
 
-    // --- HISTORY, CALCULATOR & SAVING (Standard Logic) ---
-    // ... (This logic remains standard, using getStorageData/saveStorageData helper) ...
-    
-    // History View
+    // --- HISTORY & CALCULATOR ---
     buttons.historyNav.addEventListener('click', () => {
         switchView('history');
         ui.historyTitle.innerText = currentUser ? `${currentUser}'s History` : `Guest History`;
@@ -472,7 +443,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const amountClass = allPaid ? 'text-success' : 'text-danger';
             const checkmark = allPaid ? `<svg class="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>` : '';
             
-            // Handle Names Display
             let namesStr = "";
             if (item.savedParticipants) {
                 namesStr = item.savedParticipants.map(p => p.name).join(', ');
@@ -496,7 +466,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Add Person
     buttons.addPerson.addEventListener('click', () => {
         participants.push({ id: nextId, name: `Person ${participants.length + 1}`, paid: false });
         nextId++;
@@ -545,7 +514,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.addEventListener('click', (e) => {
                 const idx = e.target.dataset.index;
                 participants[idx].paid = !participants[idx].paid;
-                renderList(); // Re-render to update UI state properly
+                renderList(); 
             });
         });
         document.querySelectorAll('.remove-btn').forEach(btn => {
@@ -559,7 +528,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Save Split
     buttons.save.addEventListener('click', () => {
         const total = inputs.total.value;
         if (!total || parseFloat(total) <= 0) { alert("Invalid amount."); return; }
@@ -617,4 +585,144 @@ document.addEventListener('DOMContentLoaded', () => {
         renderList();
         updateSplitAmounts();
     }
+
+
+    // --- ADMIN DASHBOARD ---
+    
+    // Admin Security & Entry
+    buttons.adminNav.addEventListener('click', () => {
+        if (currentUser !== 'admin') {
+            alert("Unauthorized Access.");
+            goHome();
+            return;
+        }
+        switchView('admin');
+        renderAdminDashboard();
+    });
+
+    function renderAdminDashboard() {
+        const users = JSON.parse(localStorage.getItem('splitSimpleUsers')) || [];
+        
+        // Include "guest" for calculations and clearing
+        const allProfiles = [{username: 'guest'}, ...users];
+
+        let totalSplits = 0;
+        let totalGroups = 0;
+        let totalAmount = 0;
+        let userActivity = {};
+
+        // 1. Calculate Analytics
+        allProfiles.forEach(u => {
+            const h = getStorageData('History', u.username);
+            const g = getStorageData('Groups', u.username);
+            
+            totalSplits += h.length;
+            totalGroups += g.length;
+            userActivity[u.username] = h.length;
+
+            h.forEach(item => {
+                totalAmount += parseFloat(item.total) || 0;
+            });
+        });
+
+        let mostActive = 'N/A';
+        let maxSplits = -1;
+        for (const [uname, splits] of Object.entries(userActivity)) {
+            if (splits > maxSplits && splits > 0) {
+                maxSplits = splits;
+                mostActive = uname;
+            }
+        }
+
+        const avgSplit = totalSplits > 0 ? (totalAmount / totalSplits).toFixed(2) : '0.00';
+
+        // 2. Render Stats Grid
+        ui.adminStatsGrid.innerHTML = `
+            <div class="stat-card"><span class="stat-value">${allProfiles.length}</span><span class="stat-label">Total Users</span></div>
+            <div class="stat-card"><span class="stat-value">${totalSplits}</span><span class="stat-label">Total Splits</span></div>
+            <div class="stat-card"><span class="stat-value">${totalGroups}</span><span class="stat-label">Total Groups</span></div>
+            <div class="stat-card"><span class="stat-value">$${avgSplit}</span><span class="stat-label">Avg Split</span></div>
+            <div class="stat-card"><span class="stat-value" style="font-size:1.5rem;">${mostActive}</span><span class="stat-label">Most Active</span></div>
+        `;
+
+        // 3. Render User Management List
+        ui.adminUserList.innerHTML = '';
+        allProfiles.forEach(u => {
+            const hLen = getStorageData('History', u.username).length;
+            const gLen = getStorageData('Groups', u.username).length;
+
+            const card = document.createElement('div');
+            card.className = 'admin-user-card';
+            card.innerHTML = `
+                <div class="admin-user-header">
+                    <span>👤 ${u.username} ${u.username === 'admin' ? '(Super Admin)' : ''}</span>
+                    <span style="font-size: 0.8rem; font-weight: normal; color: #888;">${hLen} Splits | ${gLen} Groups</span>
+                </div>
+                <div class="admin-user-actions">
+                    <button class="admin-btn clear-hist" data-user="${u.username}">Clear History</button>
+                    <button class="admin-btn clear-grp" data-user="${u.username}">Clear Groups</button>
+                    ${u.username !== 'admin' && u.username !== 'guest' ? `<button class="admin-btn danger delete-acc" data-user="${u.username}">Delete Account</button>` : ''}
+                </div>
+            `;
+
+            // Attach Admin Action Listeners
+            card.querySelector('.clear-hist').addEventListener('click', function() {
+                if (confirm(`Clear all history for ${u.username}?`)) {
+                    localStorage.removeItem(getDataKey('History', u.username));
+                    adminFeedback(this, "Cleared!");
+                }
+            });
+
+            card.querySelector('.clear-grp').addEventListener('click', function() {
+                if (confirm(`Clear all groups for ${u.username}?`)) {
+                    localStorage.removeItem(getDataKey('Groups', u.username));
+                    adminFeedback(this, "Cleared!");
+                }
+            });
+
+            const delBtn = card.querySelector('.delete-acc');
+            if(delBtn) {
+                delBtn.addEventListener('click', function() {
+                    if (confirm(`WARNING: Permanently delete account for ${u.username}?`)) {
+                        // Remove history/groups
+                        localStorage.removeItem(getDataKey('History', u.username));
+                        localStorage.removeItem(getDataKey('Groups', u.username));
+                        
+                        // Remove from users list
+                        const currentUsers = JSON.parse(localStorage.getItem('splitSimpleUsers')) || [];
+                        const updatedUsers = currentUsers.filter(usr => usr.username !== u.username);
+                        localStorage.setItem('splitSimpleUsers', JSON.stringify(updatedUsers));
+                        
+                        adminFeedback(this, "Deleted!");
+                    }
+                });
+            }
+
+            ui.adminUserList.appendChild(card);
+        });
+    }
+
+    function adminFeedback(btn, text) {
+        const originalText = btn.innerText;
+        btn.innerText = text;
+        btn.style.backgroundColor = 'var(--success)';
+        btn.style.color = 'white';
+        btn.style.borderColor = 'var(--success)';
+        setTimeout(() => {
+            renderAdminDashboard(); // Re-fetch all data and reset UI
+        }, 1000);
+    }
+
+    // Factory Reset
+    buttons.globalReset.addEventListener('click', () => {
+        if (confirm("🚨 CRITICAL WARNING 🚨\n\nAre you absolutely sure you want to delete ALL data? This will wipe every user, group, and split in the application. This cannot be undone.")) {
+            // Confirm twice for safety
+            if (confirm("Are you 100% positive? Last chance to cancel.")) {
+                localStorage.clear();
+                currentUser = null;
+                alert("Database Wiped. Application Reset.");
+                location.reload(); // Hard refresh to reset memory
+            }
+        }
+    });
 });
