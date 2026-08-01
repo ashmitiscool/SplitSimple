@@ -31,7 +31,7 @@ Unlike traditional expense trackers that require tedious itemization, invites, o
 
 ## 🛠️ Tech Stack
 
-- **Frontend:** React / Modern JavaScript (SPA)
+- **Frontend:** Vanilla JavaScript (SPA)
 - **Styling:** CSS / Modern Minimalist UI Components
 - **Hosting / Deployment:** [Vercel](https://split-simple-money.vercel.app)
 - **State & Storage:** Client-side state management with persistent user account storage (Groups & History)
