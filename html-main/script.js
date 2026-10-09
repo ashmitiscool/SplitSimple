@@ -82,8 +82,50 @@ document.addEventListener('DOMContentLoaded', () => {
     let isRegisterMode = false;
     let selectedGroupMembers = null; 
 
+    // --- AWS cloud sync: browser -> API Gateway -> Lambda -> DynamoDB ---
+    // localStorage stays as a fast local cache; DynamoDB is the permanent copy.
+    const API_URL = 'https://xqne7phadf.execute-api.us-east-1.amazonaws.com/items';
+
+    async function cloudSave(type, data) {
+        if (!currentUser) return; // guests stay local-only
+        try {
+            await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: currentUser, itemId: type, type: type, data: data })
+            });
+        } catch (err) { console.error('Cloud save failed:', err); }
+    }
+
+    async function cloudDelete(type) {
+        if (!currentUser) return;
+        try {
+            await fetch(`${API_URL}?userId=${encodeURIComponent(currentUser)}&itemId=${encodeURIComponent(type)}`, { method: 'DELETE' });
+        } catch (err) { console.error('Cloud delete failed:', err); }
+    }
+
+    async function syncFromCloud() {
+        if (!currentUser) return;
+        try {
+            const res = await fetch(`${API_URL}?userId=${encodeURIComponent(currentUser)}`);
+            const items = await res.json();
+            for (const type of ['Groups', 'History']) {
+                const cloudItem = items.find(i => i.itemId === type);
+                if (cloudItem) {
+                    localStorage.setItem(getDataKey(type), JSON.stringify(cloudItem.data));
+                } else {
+                    const local = getStorageData(type);
+                    if (local.length) cloudSave(type, local); // first login: upload existing local data
+                }
+            }
+            renderHistory();
+            renderGroupsList();
+        } catch (err) { console.error('Cloud sync failed:', err); }
+    }
+
     // Initialize
     updateUserIcon();
+    syncFromCloud();
 
     // --- Helper Functions ---
     function getDataKey(type, specificUser = null) {
@@ -98,6 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function saveStorageData(type, data) {
         localStorage.setItem(getDataKey(type), JSON.stringify(data));
+        cloudSave(type, data);
     }
 
     function updateUserIcon() {
@@ -343,6 +386,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('splitSimpleCurrentUser', currentUser);
             updateUserIcon();
             alert("Account created!");
+            syncFromCloud();
             goHome();
         } else {
             const user = users.find(u => u.username === username && u.password === password);
@@ -350,6 +394,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentUser = username;
                 localStorage.setItem('splitSimpleCurrentUser', currentUser);
                 updateUserIcon();
+                syncFromCloud();
                 goHome();
             } else {
                 ui.authError.innerText = "Invalid credentials";
@@ -570,6 +615,7 @@ document.addEventListener('DOMContentLoaded', () => {
     buttons.clearHistory.addEventListener('click', () => {
         if(confirm("Clear history?")) {
             localStorage.removeItem(getDataKey('History'));
+            cloudDelete('History');
             renderHistory();
         }
     });
